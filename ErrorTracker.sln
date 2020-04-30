@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorTracker", "ErrorTracker\ErrorTracker.csproj", "{838C5375-4ECB-409C-A7ED-543565E0DD08}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Debug|x86.ActiveCfg = Debug|x86
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Debug|x86.Build.0 = Debug|x86
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Release|x86.ActiveCfg = Release|x86
+		{838C5375-4ECB-409C-A7ED-543565E0DD08}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7066D080-6625-4897-A9A4-6672C0A6416E}
+	EndGlobalSection
+EndGlobal

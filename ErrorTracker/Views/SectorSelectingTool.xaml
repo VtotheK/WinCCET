@@ -1,0 +1,30 @@
+﻿<Window x:Class="ErrorTracker.SectorSelectingTool"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ErrorTracker"
+        mc:Ignorable="d"
+        Title="SectorSelectingTool"
+        WindowStyle="None" AllowsTransparency="True"
+        Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}"
+        Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"
+        WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <SolidColorBrush Color="#FFB0B0B0"
+                         Opacity="0.01" />
+    </Window.Background>
+    <Grid MouseDown="Grid_MouseDown" Background="#00000000" MouseMove="Grid_MouseMove" MouseUp="Grid_MouseUp" IsHitTestVisible="True"  Height="1080" Width="1920">
+        <Canvas>
+        <Rectangle x:Name="SelectionRect"
+                       Stroke="Red" 
+                       StrokeThickness="1" 
+                       StrokeDashArray="4 4" 
+                       Visibility="Hidden"
+                       Opacity="1"
+                       >
+        </Rectangle>
+        </Canvas>
+        <Image x:Name="IMGTEST" Height="350" Width="350"></Image>
+    </Grid>
+</Window>

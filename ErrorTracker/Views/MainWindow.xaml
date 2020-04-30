@@ -1,0 +1,45 @@
+﻿<Window x:Class="ErrorTracker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ErrorTracker"
+        mc:Ignorable="d"
+        Title="WinCCET" Height="600" Width="950" ResizeMode="NoResize" Closed="Window_Closed" Background="GhostWhite" >
+    
+    
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="12*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+
+        <Button IsEnabled="{Binding Path=IsSelectionsMade}" Name="AreaTool" Height="30" FontSize="18" Grid.Column="3" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" Padding="0" Margin="0 0 10 10" BorderBrush="#2e2e2e" BorderThickness="3" Background="#757575" Click="AreaTool_Click" Foreground="White">Valitse alue</Button>
+        
+        <ComboBox x:Name="VideoSelectionCMB" ItemsSource="{Binding Path=RecorderNames}" Grid.Row="1" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Top" Width="150" Height="20" Text="Valitse kamera" IsEditable="True" SelectionChanged="VideoSelectionCMB_SelectionChanged"/>
+        <Button x:Name="RefreshButton" BorderThickness="0" Grid.Column="0" Grid.Row="1"  Height="20" Width="20" VerticalAlignment="Top" Margin="180 0 0 0" HorizontalAlignment="Center" Background="Transparent" Click="RefreshButton_Click">
+            <Image Source="/ErrorTracker;component/Images/reload.png" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Button>
+        
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 25 0 0">
+            <TextBlock FontSize="12" Text="Tallennetaan polkuun:" FontWeight="Medium" TextAlignment="Center"></TextBlock>
+            <TextBlock FontSize="12" Text="{Binding Path=FolderDialogDestination}" TextAlignment="Center"></TextBlock>
+            <Button Grid.Column="0" Grid.Row="1" Height="20" Width="150" VerticalAlignment="Top" Margin="0 10 0 0" Click="Button_Click">
+                Valitse tallennuskansio
+            </Button>
+        </StackPanel>
+        
+        <Canvas Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" Background="Gray"></Canvas>
+        <Border  Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" BorderBrush="Black" BorderThickness="2"></Border>
+        <Label  Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="24">ESIKATSELU</Label>
+        <Image x:Name="VideoPreviewImage"  Source="{Binding Path=PreviewSource}" Margin="0 0 10 10" VerticalAlignment="Bottom" Width="600" Height="380" HorizontalAlignment="Stretch" Grid.Column="1"  Grid.Row="1" ></Image>
+    </Grid>
+</Window>
