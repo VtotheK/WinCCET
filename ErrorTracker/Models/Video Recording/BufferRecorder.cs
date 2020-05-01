@@ -34,6 +34,10 @@ namespace ErrorTracker
         public BufferRecorder()
         {
             camera = SessionData.UserDevice;
+            if (SessionData.VideoCapabilityIndex != null)
+            {
+                camera.VideoResolution = camera.VideoCapabilities[(int)SessionData.VideoCapabilityIndex];
+            }
             camera.NewFrame += new NewFrameEventHandler(video_NewFrame);
             _framesPerSecond = 20;
             _fpsChokeMilliseconds = 25;
@@ -41,8 +45,7 @@ namespace ErrorTracker
 
         public void StartRecording()
         {
-        //starts recording the video
-        camera.Start();
+            camera.Start();
             _frameCountStopWatch.Start();
             _fpsStopWatch.Start();
         }
@@ -253,9 +256,6 @@ namespace ErrorTracker
                 Bitmap.Dispose();
             }
         }
-
     }
-
-
 }
 

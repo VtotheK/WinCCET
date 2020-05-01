@@ -83,7 +83,6 @@ namespace ErrorTracker
             }
             time = rnd.Next(40000, 50000); //TODO debug debug debug REMOVE
 
-
             Thread.Sleep(1000); //Filling the buffer
             ImageData previousFrameImData = new ImageData();
             ImageData currentFrameImData = new ImageData();
@@ -288,7 +287,6 @@ namespace ErrorTracker
             }
         }
 
-
         private PixelColor PixelType(Color sample) //Double the channel threshold value for red and green for their Pixelcolor enum
         {
             #region Red color testing 
@@ -376,7 +374,6 @@ namespace ErrorTracker
             public int Gray { get => _gray; set => _gray = value; }
             public int Other { get => _other; set => _other = value; }
             public ImageState ImageState { get => _imageState; set => _imageState = value; }
-          
 
             public void ClearData()
             {
@@ -388,7 +385,6 @@ namespace ErrorTracker
                 Other = 0;
                 ImageState = ImageState.None;
             }
-
             public ImageData Clone()
             {
                 return new ImageData(Red, Green, Pink, White, Gray, Other, ImageState);

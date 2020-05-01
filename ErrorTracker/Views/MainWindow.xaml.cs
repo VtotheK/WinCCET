@@ -60,5 +60,10 @@ namespace ErrorTracker
         {
             viewModel.OpenFolderDialog();
         }
+
+        private void ResolutionComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            viewModel.SetUserResolution(ResolutionComboBox.SelectedIndex);
+        }
     }
 }

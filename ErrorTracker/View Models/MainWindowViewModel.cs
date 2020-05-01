@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.IO;
 using System.Diagnostics;
 using System.ComponentModel;
@@ -18,6 +19,7 @@ namespace ErrorTracker
         BitmapSource previewSource;
         RecorderCollection recorderCollection = new RecorderCollection();
 
+        List<string> _availableResolutions = new List<string>();
         List<string> _recorderNames;
         CommonFileDialogResult _folderResult = CommonFileDialogResult.None;
         string _folderDialogDestination = NoFolderDestination;
@@ -108,6 +110,19 @@ namespace ErrorTracker
             }
         }
 
+        public List<string> AvailableResolutions
+        {
+            get
+            {
+                return _availableResolutions;
+            }
+            set
+            {
+                _availableResolutions = value;
+                OnPropertyChanged(nameof(MainWindowViewModel.AvailableResolutions));
+            }
+        }
+
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -144,6 +159,7 @@ namespace ErrorTracker
         public void SetUserRecorder(string itemName)
         {
             UserDevice = SearchVideoRecorders(itemName);
+            ShowAvailableResolutions(UserDevice);
         }
 
         private VideoCaptureDevice SearchVideoRecorders(string itemName)
@@ -156,6 +172,36 @@ namespace ErrorTracker
                 }
             }
             return null;
+        }
+
+        public void ShowAvailableResolutions(VideoCaptureDevice device)
+        {
+            VideoCapabilities[] capabilities = device.VideoCapabilities;
+            List<string> resolutions = new List<string>();
+            foreach (VideoCapabilities cap in capabilities)
+            {
+                bool width = false;
+                string[] arr = Regex.Split(cap.FrameSize.ToString(), @"\D+");
+                string res = string.Empty;
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    if (String.IsNullOrEmpty(arr[i]))
+                        continue;
+                    res += arr[i];
+                    if (!width)
+                    {
+                        width = true;
+                        res += 'x';
+                    }
+                }
+                resolutions.Add(res);
+            }
+            AvailableResolutions = resolutions;
+        }
+
+        public void SetUserResolution(int index)
+        {
+            SessionData.VideoCapabilityIndex = index;
         }
 
         private void RecieveFrame(BitmapSource source)
