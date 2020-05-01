@@ -13,6 +13,7 @@ namespace ErrorTracker
 {
     sealed class MainWindowViewModel : INotifyPropertyChanged
     {
+        MainWindow mainWindow;
         const int FolderDestinationMaxChars = 50;
         const string NoFolderDestination = "Ei polkua";
 
@@ -20,6 +21,7 @@ namespace ErrorTracker
         RecorderCollection recorderCollection = new RecorderCollection();
 
         List<string> _availableResolutions = new List<string>();
+        List<string> _availableFramesPerSecond = new List<string>();
         List<string> _recorderNames;
         CommonFileDialogResult _folderResult = CommonFileDialogResult.None;
         string _folderDialogDestination = NoFolderDestination;
@@ -28,8 +30,9 @@ namespace ErrorTracker
         VideoCaptureDevice _userDevice = null;
         VideoPreviewer vPreview = new VideoPreviewer(null);
         VideoCaptureDevice selectedDevice = new VideoCaptureDevice();
-        public MainWindowViewModel()
+        public MainWindowViewModel(MainWindow main)
         {
+            mainWindow = main;
             RefreshRecorderList();
         }
 
@@ -123,6 +126,19 @@ namespace ErrorTracker
             }
         }
 
+        public List<string> AvailableFramesPerSecond
+        {
+            get
+            {
+                return _availableFramesPerSecond;
+            }
+            set
+            {
+                _availableFramesPerSecond = value;
+                OnPropertyChanged(nameof(MainWindowViewModel.AvailableFramesPerSecond));
+            }
+        }
+
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -160,6 +176,23 @@ namespace ErrorTracker
         {
             UserDevice = SearchVideoRecorders(itemName);
             ShowAvailableResolutions(UserDevice);
+            ShowAvailableFramesPerSecond(UserDevice);
+        }
+
+        private void ShowAvailableFramesPerSecond(VideoCaptureDevice device)
+        {
+            List<string> fps = new List<string>();
+            int frames = device.VideoCapabilities[0].MaximumFrameRate;
+            frames -= frames % 10;
+            fps.Add(frames.ToString() + "fps");
+            while (frames > 5)
+            {
+                frames -= 5;
+                fps.Add(frames.ToString() + "fps");
+            }
+            AvailableFramesPerSecond = fps;
+            mainWindow.FPSComboBox.SelectedIndex = 0;
+            SessionData.UserFramesPerSecond = Convert.ToInt32(fps[0].Trim('f','p','s'));
         }
 
         private VideoCaptureDevice SearchVideoRecorders(string itemName)
@@ -176,9 +209,8 @@ namespace ErrorTracker
 
         public void ShowAvailableResolutions(VideoCaptureDevice device)
         {
-            VideoCapabilities[] capabilities = device.VideoCapabilities;
             List<string> resolutions = new List<string>();
-            foreach (VideoCapabilities cap in capabilities)
+            foreach (VideoCapabilities cap in device.VideoCapabilities)
             {
                 bool width = false;
                 string[] arr = Regex.Split(cap.FrameSize.ToString(), @"\D+");
@@ -197,11 +229,8 @@ namespace ErrorTracker
                 resolutions.Add(res);
             }
             AvailableResolutions = resolutions;
-        }
-
-        public void SetUserResolution(int index)
-        {
-            SessionData.VideoCapabilityIndex = index;
+            mainWindow.ResolutionComboBox.SelectedIndex = 0;
+            SessionData.VideoCapabilityIndex = mainWindow.ResolutionComboBox.SelectedIndex;
         }
 
         private void RecieveFrame(BitmapSource source)

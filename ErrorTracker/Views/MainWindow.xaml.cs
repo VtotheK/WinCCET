@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace ErrorTracker
@@ -13,7 +14,7 @@ namespace ErrorTracker
         public MainWindow()
         {
             InitializeComponent();
-            viewModel = new MainWindowViewModel();
+            viewModel = new MainWindowViewModel(this);
             DataContext = viewModel;
         }
 
@@ -63,7 +64,14 @@ namespace ErrorTracker
 
         private void ResolutionComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            viewModel.SetUserResolution(ResolutionComboBox.SelectedIndex);
+            SessionData.VideoCapabilityIndex = ResolutionComboBox.SelectedIndex;
+        }
+
+        private void FPSComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            int result;
+            if (Int32.TryParse(viewModel.AvailableFramesPerSecond[FPSComboBox.SelectedIndex].Trim('f', 'p', 's'), out result))
+                SessionData.UserFramesPerSecond = result;
         }
     }
 }

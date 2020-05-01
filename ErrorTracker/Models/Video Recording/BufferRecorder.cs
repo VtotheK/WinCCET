@@ -24,8 +24,9 @@ namespace ErrorTracker
         Frame[] buffer = new Frame[1200];
 
         int _frameCount = 0;
-        int _framesPerSecond;
-        readonly long _fpsChokeMilliseconds;
+        int _currentFramesPerSecond = 20;
+        readonly int _fpsChokeMilliseconds = 30;
+        readonly int? _fpsChoke;
         Stopwatch _frameCountStopWatch = new Stopwatch();
         Stopwatch _fpsStopWatch = new Stopwatch();
         int index = 0;
@@ -38,9 +39,13 @@ namespace ErrorTracker
             {
                 camera.VideoResolution = camera.VideoCapabilities[(int)SessionData.VideoCapabilityIndex];
             }
+            if (SessionData.UserFramesPerSecond != null)
+            {
+                _fpsChoke = SessionData.UserFramesPerSecond;
+                _fpsChokeMilliseconds = (int)((1F / _fpsChoke) * 1000);
+                _currentFramesPerSecond = (int)_fpsChoke;
+            }
             camera.NewFrame += new NewFrameEventHandler(video_NewFrame);
-            _framesPerSecond = 20;
-            _fpsChokeMilliseconds = 25;
         }
 
         public void StartRecording()
@@ -79,7 +84,7 @@ namespace ErrorTracker
             _frameCount++;
             if(_frameCount > 100)
             {
-                _framesPerSecond = _frameCount / (int)_frameCountStopWatch.Elapsed.TotalSeconds;
+                _currentFramesPerSecond = _frameCount / (int)_frameCountStopWatch.Elapsed.TotalSeconds;
                 _frameCountStopWatch.Restart();
                 _frameCount = 0;
             }
@@ -140,7 +145,7 @@ namespace ErrorTracker
             {
                 DebugLogger.Log(LogType.Warning,e.ToString() + " @BufferRecorder.SaveVideo");
             }
-            writer.Open(fileName, width, height, _framesPerSecond, VideoCodec.MPEG4, 4000000); //Bitrate in bytes
+            writer.Open(fileName, width, height, _currentFramesPerSecond, VideoCodec.MPEG4, 4000000); //Bitrate in bytes
             try
             {
                 for (int i = 0; i < buffer.Length; i++)
@@ -170,7 +175,7 @@ namespace ErrorTracker
                             {
                                 index = 0;
                             }
-                            DebugLogger.Log(LogType.Error, $"ArgumentException. Forced to skip a frame in BufferRecorder.cs line 141. More info: Frame index:{index}, timestampindex: {timeStampIndex} Frame datetime: {buffer[index].TimeStamp}, additional info : {e.Message}");
+                            DebugLogger.Log(LogType.Error, $"ArgumentException. Forced to skip a frame in BufferRecorder.cs line 141. More info: {e.Message}");
                         }
                     }
                     else { index = 0; }
