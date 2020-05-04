@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ErrorTracker
 {
@@ -16,6 +17,8 @@ namespace ErrorTracker
             InitializeComponent();
             viewModel = new MainWindowViewModel(this);
             DataContext = viewModel;
+            SessionData.VideoClipLength = (int)ClipLength.Value;
+            SessionData.AfterErrorClipLength = (int)AfterErrorLength.Value;
         }
 
         private void AreaTool_Click(object sender, RoutedEventArgs e)
@@ -65,13 +68,37 @@ namespace ErrorTracker
         private void ResolutionComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             SessionData.VideoCapabilityIndex = ResolutionComboBox.SelectedIndex;
+            viewModel.CalculateRAMUsageAndClipLength();
         }
 
         private void FPSComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             int result;
             if (Int32.TryParse(viewModel.AvailableFramesPerSecond[FPSComboBox.SelectedIndex].Trim('f', 'p', 's'), out result))
+            {
                 SessionData.UserFramesPerSecond = result;
+                viewModel.CalculateRAMUsageAndClipLength();
+            }
+        }
+
+        private void ClipLength_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var slider = sender as Slider;
+            int value = slider.Value > 0.5 ? (int)Math.Ceiling(slider.Value) : (int)Math.Floor(slider.Value);
+            slider.Value = value;
+            SessionData.VideoClipLength = value;
+            if(viewModel!=null)
+                viewModel.CalculateRAMUsageAndClipLength();
+        }
+
+        private void AfterErrorLength_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var slider = sender as Slider;
+            int value = slider.Value > 0.5 ? (int)Math.Ceiling(slider.Value) : (int)Math.Floor(slider.Value);
+            slider.Value = value;
+            SessionData.AfterErrorClipLength = value;
+            if(viewModel!=null)
+                viewModel.CalculateRAMUsageAndClipLength();
         }
     }
 }

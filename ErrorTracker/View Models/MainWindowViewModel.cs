@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Diagnostics;
@@ -13,8 +14,9 @@ namespace ErrorTracker
 {
     sealed class MainWindowViewModel : INotifyPropertyChanged
     {
-        MainWindow mainWindow;
+        MainWindow _mainWindow;
         const int FolderDestinationMaxChars = 50;
+        const int Bits = 16;
         const string NoFolderDestination = "Ei polkua";
 
         BitmapSource previewSource;
@@ -23,16 +25,20 @@ namespace ErrorTracker
         List<string> _availableResolutions = new List<string>();
         List<string> _availableFramesPerSecond = new List<string>();
         List<string> _recorderNames;
-        CommonFileDialogResult _folderResult = CommonFileDialogResult.None;
         string _folderDialogDestination = NoFolderDestination;
+        string _RAMUsageApproximation;
+        string _clipLengthApproximation;
         bool _isSelectionsMade = false;
+
+        CommonFileDialogResult _folderResult = CommonFileDialogResult.None;
+
 
         VideoCaptureDevice _userDevice = null;
         VideoPreviewer vPreview = new VideoPreviewer(null);
         VideoCaptureDevice selectedDevice = new VideoCaptureDevice();
         public MainWindowViewModel(MainWindow main)
         {
-            mainWindow = main;
+            _mainWindow = main;
             RefreshRecorderList();
         }
 
@@ -139,6 +145,31 @@ namespace ErrorTracker
             }
         }
 
+        public string ClipLengthApproximation
+        {
+            get
+            { 
+                return _clipLengthApproximation;
+            }
+            set
+            {
+                _clipLengthApproximation = value;
+                OnPropertyChanged(nameof(MainWindowViewModel.ClipLengthApproximation));
+            }
+        }
+        public string RAMUsageApproximation
+        {
+            get
+            { 
+                return _RAMUsageApproximation;
+            }
+            set
+            {
+                _RAMUsageApproximation = value;
+                OnPropertyChanged(nameof(MainWindowViewModel.RAMUsageApproximation));
+            }
+        }
+
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -177,6 +208,36 @@ namespace ErrorTracker
             UserDevice = SearchVideoRecorders(itemName);
             ShowAvailableResolutions(UserDevice);
             ShowAvailableFramesPerSecond(UserDevice);
+            CalculateRAMUsageAndClipLength();
+        }
+
+        public void CalculateRAMUsageAndClipLength()
+        {
+            if (SessionData.VideoClipLength != null && SessionData.AfterErrorClipLength != null)
+            {
+                int clipLength = (int)SessionData.VideoClipLength;
+                int afterErrorLength = (int)SessionData.AfterErrorClipLength;
+                _mainWindow.ClipLengthApproximation.Text = (clipLength+afterErrorLength).ToString() + 's';
+                if (SessionData.UserDevice != null && SessionData.UserFramesPerSecond != null)
+                {
+                    int frameX = SessionData.UserDevice.VideoCapabilities[(int)SessionData.VideoCapabilityIndex].FrameSize.Width;
+                    int frameY = SessionData.UserDevice.VideoCapabilities[(int)SessionData.VideoCapabilityIndex].FrameSize.Height;
+                    float RAMUsage = (((float)frameX * frameY * 16 / 8) / 1000000 * (clipLength + afterErrorLength) * (int)SessionData.UserFramesPerSecond);
+                    _mainWindow.RAMUsageApproximation.Text = ((int)RAMUsage).ToString() + "Mt";
+                    if (RAMUsage > 3000)
+                    {
+                        _mainWindow.RAMUsageApproximation.Background = Brushes.Red;
+                    }
+                    else if (RAMUsage > 2500)
+                    {
+                        _mainWindow.RAMUsageApproximation.Background = Brushes.Yellow;
+                    }
+                    else
+                    {
+                        _mainWindow.RAMUsageApproximation.Background = Brushes.LightGray;
+                    }
+                }
+            }
         }
 
         private void ShowAvailableFramesPerSecond(VideoCaptureDevice device)
@@ -191,7 +252,7 @@ namespace ErrorTracker
                 fps.Add(frames.ToString() + "fps");
             }
             AvailableFramesPerSecond = fps;
-            mainWindow.FPSComboBox.SelectedIndex = 0;
+            _mainWindow.FPSComboBox.SelectedIndex = 0;
             SessionData.UserFramesPerSecond = Convert.ToInt32(fps[0].Trim('f','p','s'));
         }
 
@@ -229,8 +290,8 @@ namespace ErrorTracker
                 resolutions.Add(res);
             }
             AvailableResolutions = resolutions;
-            mainWindow.ResolutionComboBox.SelectedIndex = 0;
-            SessionData.VideoCapabilityIndex = mainWindow.ResolutionComboBox.SelectedIndex;
+            _mainWindow.ResolutionComboBox.SelectedIndex = 0;
+            SessionData.VideoCapabilityIndex = _mainWindow.ResolutionComboBox.SelectedIndex;
         }
 
         private void RecieveFrame(BitmapSource source)

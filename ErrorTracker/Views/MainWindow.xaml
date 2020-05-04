@@ -22,13 +22,13 @@
 
 
 
-        <Button IsEnabled="{Binding Path=IsSelectionsMade}" Name="AreaTool" Height="30" FontSize="18" Grid.Column="3" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" Padding="0" Margin="0 0 10 10" BorderBrush="#2e2e2e" BorderThickness="3" Background="#757575" Click="AreaTool_Click" Foreground="White">Valitse alue</Button>
+        <Button IsEnabled="{Binding Path=IsSelectionsMade}" Name="AreaTool" Height="30" FontSize="18" Grid.Column="3" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" Padding="0" Margin="0 0 10 10" BorderBrush="#2e2e2e" BorderThickness="1" Background="#757575" Click="AreaTool_Click" Foreground="White">Valitse alue</Button>
         
         <ComboBox x:Name="VideoSelectionCMB" ItemsSource="{Binding Path=RecorderNames}" Grid.Row="1" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Top" Width="150" Height="20" Text="Valitse kamera" IsEditable="True" SelectionChanged="VideoSelectionCMB_SelectionChanged"/>
         <Button x:Name="RefreshButton" BorderThickness="0" Grid.Column="0" Grid.Row="1"  Height="20" Width="20" VerticalAlignment="Top" Margin="180 0 0 0" HorizontalAlignment="Center" Background="Transparent" Click="RefreshButton_Click">
             <Image Source="/ErrorTracker;component/Images/reload.png" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Button>
-        
+
         <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 25 0 0">
             <TextBlock FontSize="12" Text="Tallennetaan polkuun:" FontWeight="Medium" TextAlignment="Center"></TextBlock>
             <TextBlock FontSize="12" Text="{Binding Path=FolderDialogDestination}" TextAlignment="Center"></TextBlock>
@@ -37,10 +37,17 @@
             </Button>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0 10 0 0">Resoluutio</Label>
             <ComboBox x:Name="ResolutionComboBox" ItemsSource="{Binding Path=AvailableResolutions}" Margin="0 -5 0 0" IsReadOnly="True" Height="25" Width="150" SelectionChanged="ResolutionComboBox_SelectionChanged"/>
-            <Label Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold">Ruudunpäivitys</Label>
+            <Label Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold">Max ruudunpäivitys</Label>
             <ComboBox x:Name="FPSComboBox" HorizontalAlignment="Center" ItemsSource="{Binding Path=AvailableFramesPerSecond}" VerticalAlignment="Center" Width="150" Height="25" Margin="0 -5 0 0" SelectionChanged="FPSComboBox_SelectionChanged"></ComboBox>
+            <Label Height="25" HorizontalAlignment="Center">Videoklipin pituus sekunteina</Label>
+            <Slider x:Name="ClipLength" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" Width="250" Background="LightGray" BorderBrush="Gray" BorderThickness="1" Minimum="10" Maximum="40" Value="10" ValueChanged="ClipLength_ValueChanged"></Slider>
+            <Label Height="25" HorizontalAlignment="Center">Häiriön jälkeinen tallennusaika</Label>
+            <Slider x:Name="AfterErrorLength" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" Width="250" Background="LightGray" BorderBrush="Gray" BorderThickness="1" Minimum="1" Maximum="10" Value="1" ValueChanged="AfterErrorLength_ValueChanged"></Slider>
         </StackPanel>
-        
+        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 150 0 0">Arvioitu muistin käyttö</Label>
+        <TextBlock x:Name="RAMUsageApproximation" Grid.Row="1" Grid.Column="0" Background="LightGray" Height="20" Width="120" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 190 0 0"></TextBlock>
+        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 150 0 0">Video klipin pituus</Label>
+        <TextBlock x:Name="ClipLengthApproximation" Grid.Row="1" Grid.Column="0" Background="LightGray" Height="20" Width="120" TextAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 190 0 0"></TextBlock>
         <Canvas Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" Background="Gray"></Canvas>
         <Border  Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" BorderBrush="Black" BorderThickness="2"></Border>
         <Label  Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="24">ESIKATSELU</Label>
