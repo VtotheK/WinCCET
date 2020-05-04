@@ -21,7 +21,7 @@ namespace ErrorTracker
 
         VideoCaptureDevice camera;
         VideoFileWriter writer = new VideoFileWriter();
-        Frame[] buffer = new Frame[1200];
+        Frame[] buffer;
 
         int _frameCount = 0;
         int _currentFramesPerSecond = 20;
@@ -44,12 +44,16 @@ namespace ErrorTracker
                 _fpsChoke = SessionData.UserFramesPerSecond;
                 _fpsChokeMilliseconds = (int)((1F / _fpsChoke) * 1000);
                 _currentFramesPerSecond = (int)_fpsChoke;
+                buffer = new Frame[(int)SessionData.UserFramesPerSecond * ((int)SessionData.VideoClipLength + (int)SessionData.AfterErrorClipLength)];
             }
             camera.NewFrame += new NewFrameEventHandler(video_NewFrame);
         }
 
         public void StartRecording()
         {
+            DebugLogger.Log(LogType.Information, $"Recording started at {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}.\n" +
+                            $"SessionData:\nFPS={SessionData.UserFramesPerSecond}\nVideoCapabilityIndex={SessionData.VideoCapabilityIndex}\nClipLength={SessionData.VideoClipLength}\n" +
+                            $"AfterErrorClipLength={SessionData.AfterErrorClipLength}");
             camera.Start();
             _frameCountStopWatch.Start();
             _fpsStopWatch.Start();
@@ -67,7 +71,7 @@ namespace ErrorTracker
         public Task CutVideoClip(VideoInfoArgs args)
         {
             Task task = Task.Run(() => {
-                Thread.Sleep(3000);
+                Thread.Sleep((int)SessionData.AfterErrorClipLength*1000);
                 camera.SignalToStop();
                 Thread.Sleep(500);
                 SaveVideo();

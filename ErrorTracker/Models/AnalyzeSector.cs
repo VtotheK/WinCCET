@@ -81,7 +81,7 @@ namespace ErrorTracker
                 DebugLogger.Log(LogType.FATALERROR,$"SectorRect was null @ AnalyzeSector line 80");
                 return;
             }
-            time = rnd.Next(40000, 50000); //TODO debug debug debug REMOVE
+            time = rnd.Next(100000, 120000); //TODO debug debug debug REMOVE
 
             Thread.Sleep(1000); //Filling the buffer
             ImageData previousFrameImData = new ImageData();
@@ -195,7 +195,7 @@ namespace ErrorTracker
                         task.Wait();
                         sw.Restart();
                         time = 0;
-                        time = rnd.Next(40000, 50000);
+                        time = rnd.Next(100000, 1200000);
                     }
                     previousFrameImData.Gray = currentFrameImData.Gray;
                     previousFrameImData.Green = currentFrameImData.Green;
