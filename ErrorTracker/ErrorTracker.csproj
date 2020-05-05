@@ -378,6 +378,9 @@
   <ItemGroup>
     <Resource Include="Images\reload.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\WINCCET.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

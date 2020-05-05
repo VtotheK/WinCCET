@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ErrorTracker"
         mc:Ignorable="d"
-        Title="SectorSelectingTool"
+        Title="Sektorin valitsin"
         WindowStyle="None" AllowsTransparency="True"
         Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}"
         Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"

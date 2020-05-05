@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ErrorTracker"
         mc:Ignorable="d"
-        Title="WinCCET" Height="600" Width="950" ResizeMode="NoResize" Closed="Window_Closed" Background="GhostWhite" >
+        Title="WinCCET" Icon="/Images/WINCCET.ico" Height="600" Width="950" ResizeMode="NoResize" Closed="Window_Closed" Background="GhostWhite" >
     
     
     <Grid>

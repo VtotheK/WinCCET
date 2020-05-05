@@ -33,17 +33,13 @@ namespace ErrorTracker
         public void StopStream()
         {
             if (_device != null)
-            {
                 _device.Stop();
-            }
         }
 
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             if(_currentFrame != null)
-            {
                 _currentFrame.Dispose();
-            }
             _currentFrame = (Bitmap)eventArgs.Frame.Clone();
             BtSource = ImageHelper.GetBitmapSourceFromBitmap(_currentFrame);
             BtSource.Freeze();

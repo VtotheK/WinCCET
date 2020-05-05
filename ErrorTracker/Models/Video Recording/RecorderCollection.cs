@@ -22,9 +22,7 @@ namespace ErrorTracker
             _recorderNames.Clear();
             _recorders = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if(_recorders.Count < 1)
-            {
                 _recorderNames.Add("No recorders found");
-            }
             else
             {
                 foreach(FilterInfo item in _recorders)

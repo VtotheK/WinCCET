@@ -196,7 +196,8 @@ namespace ErrorTracker
                     vPreview = new VideoPreviewer(null);
                 }
                 selectedDevice = SearchVideoRecorders(itemName);
-                if(selectedDevice == null) { return; }
+                if(selectedDevice == null) 
+                    return;
                 vPreview.Device = selectedDevice;
                 vPreview.FrameUpdate += RecieveFrame;
                 vPreview.StartStream();
@@ -225,17 +226,11 @@ namespace ErrorTracker
                     float RAMUsage = (((float)frameX * frameY * 16 / 8) / 1000000 * (clipLength + afterErrorLength) * (int)SessionData.UserFramesPerSecond);
                     _mainWindow.RAMUsageApproximation.Text = ((int)RAMUsage).ToString() + "Mt";
                     if (RAMUsage > 3000)
-                    {
                         _mainWindow.RAMUsageApproximation.Background = Brushes.Red;
-                    }
                     else if (RAMUsage > 2500)
-                    {
                         _mainWindow.RAMUsageApproximation.Background = Brushes.Yellow;
-                    }
                     else
-                    {
                         _mainWindow.RAMUsageApproximation.Background = Brushes.LightGray;
-                    }
                 }
             }
         }
@@ -261,9 +256,7 @@ namespace ErrorTracker
             foreach (FilterInfo camInfo in recorderCollection.Recorders)
             {
                 if (itemName == camInfo.Name)
-                {
                     return new VideoCaptureDevice(camInfo.MonikerString);
-                }
             }
             return null;
         }

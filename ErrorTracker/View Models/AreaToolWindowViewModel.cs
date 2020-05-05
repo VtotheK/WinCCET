@@ -116,9 +116,7 @@ namespace ErrorTracker
             {
                 blinkToken = _tokenSource.Token;
                 if(_analyzeSector != null)
-                {
                     _analyzeSector = null;
-                }
                 _analyzeSector = new AnalyzeSector(_sectorRect,this);
                 _analyzeSector.Start();
                 AnalyzeIsRunning = true;
@@ -145,13 +143,9 @@ namespace ErrorTracker
             while(!token.IsCancellationRequested)
             {
                 if(DontTouchTextVisibility == Visibility.Visible)
-                {
                     DontTouchTextVisibility = Visibility.Hidden;
-                }
                 else
-                {
                     DontTouchTextVisibility = Visibility.Visible;
-                }
                 Thread.Sleep(500);
             }
         }

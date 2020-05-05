@@ -83,17 +83,15 @@ namespace ErrorTracker
             }
             time = rnd.Next(100000, 120000); //TODO debug debug debug REMOVE
 
-            Thread.Sleep(1000); //Filling the buffer
+            //Thread.Sleep(1000); //Filling the buffer
             ImageData previousFrameImData = new ImageData();
             ImageData currentFrameImData = new ImageData();
             Bitmap previousFrame = ImageHelper.GetBitmapFromSector(sectorRect);
 
             try
             {
-
                 while (true && !_cancellationToken.IsCancellationRequested)
                 {
-
                     Bitmap currentFrame = ImageHelper.GetBitmapFromSector(sectorRect);
                     if (currentFrame == null)
                     {
@@ -141,52 +139,52 @@ namespace ErrorTracker
                     Debug.WriteLine($"Detected pixels: Red: {currentFrameImData.Red}, Green: {currentFrameImData.Green}, Pink: {currentFrameImData.Pink}, White{currentFrameImData.White}, Gray {currentFrameImData.Gray}");
                     Debug.WriteLine($"{previousFrameImData.ImageState.ToString()}");
                     TrackChanges(previousFrameImData, currentFrameImData);
-                    //if (sw.IsRunning)
-                    //{
-                    //    if (sw.Elapsed.Seconds >= 15) { sw.Stop(); sw.Reset(); Debug.WriteLine("Stopped SW!"); }
-                    //}
-                    //else
-                    //{
-                    //    if (previousFrameImData.ImageState != ImageState.None)
-                    //    {
-                    //        if (previousFrameImData.ImageState == ImageState.Normal)
-                    //        {
-                    //            if (currentFrameImData.ImageState == ImageState.InError) //Green -> Red state change
-                    //            {
-                    //                if (OnAnalyzeSectorChange != null)
-                    //                {
-                    //                    DebugLogger.Log(LogType.Information, $"{previousFrameImData.ImageState.ToString()} --> {currentFrameImData.ImageState.ToString()}" +
-                    //                        $" state change detected. OnAnalyzeSectorChange invoked at {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}");
-                    //                    VideoInfoArgs vInfoArgs = new VideoInfoArgs(DateTime.Now, "Normal->InError state change.");
-                    //                    Task task = OnAnalyzeSectorChange(vInfoArgs);
-                    //                    task.Wait();
-                    //                }
-                    //            }
-                    //        }
-                    //        else if (previousFrameImData.ImageState == ImageState.InError && currentFrameImData.ImageState == ImageState.Normal) //Red->Green state change
-                    //        {
-                    //            sw.Start();
-                    //            Debug.WriteLine("sw started");
-                    //        }
-                    //        else if (previousFrameImData.ImageState == ImageState.NotActive && currentFrameImData.ImageState == ImageState.InError) //Gray -> Red state change
-                    //        {
-                    //            if (OnAnalyzeSectorChange != null)
-                    //            {
-                    //                DebugLogger.Log(LogType.Information, $"{previousFrameImData.ImageState.ToString()} --> {currentFrameImData.ImageState.ToString()}" +
-                    //                    $" state change detected. OnAnalyzeSectorChange invoked at {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}");
-                    //                VideoInfoArgs vInfoArgs = new VideoInfoArgs(DateTime.Now, "NotActive -> InError state change at");
-                    //                Task task = OnAnalyzeSectorChange(vInfoArgs);
-                    //                task.Wait();
-                    //            }
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        currentFrameImData.ImageState = ImageState.Normal;
-                    //    }
-                    //}
-
-                    if(sw.Elapsed.TotalMilliseconds> time)
+                    if (sw.IsRunning)
+                    {
+                        if (sw.Elapsed.Seconds >= 15) { sw.Stop(); sw.Reset(); Debug.WriteLine("Stopped SW!"); }
+                    }
+                    else
+                    {
+                        if (previousFrameImData.ImageState != ImageState.None)
+                        {
+                            if (previousFrameImData.ImageState == ImageState.Normal)
+                            {
+                                if (currentFrameImData.ImageState == ImageState.InError) //Green -> Red state change
+                                {
+                                    if (OnAnalyzeSectorChange != null)
+                                    {
+                                        DebugLogger.Log(LogType.Information, $"{previousFrameImData.ImageState.ToString()} --> {currentFrameImData.ImageState.ToString()}" +
+                                            $" state change detected. OnAnalyzeSectorChange invoked at {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}");
+                                        VideoInfoArgs vInfoArgs = new VideoInfoArgs(DateTime.Now, "Normal->InError state change.",null);
+                                        Task task = OnAnalyzeSectorChange(vInfoArgs);
+                                        task.Wait();
+                                    }
+                                }
+                            }
+                            else if (previousFrameImData.ImageState == ImageState.InError && currentFrameImData.ImageState == ImageState.Normal) //Red->Green state change
+                            {
+                                sw.Start();
+                                Debug.WriteLine("sw started");
+                            }
+                            else if (previousFrameImData.ImageState == ImageState.NotActive && currentFrameImData.ImageState == ImageState.InError) //Gray -> Red state change
+                            {
+                                if (OnAnalyzeSectorChange != null)
+                                {
+                                    DebugLogger.Log(LogType.Information, $"{previousFrameImData.ImageState.ToString()} --> {currentFrameImData.ImageState.ToString()}" +
+                                        $" state change detected. OnAnalyzeSectorChange invoked at {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}");
+                                    VideoInfoArgs vInfoArgs = new VideoInfoArgs(DateTime.Now, "NotActive -> InError state change at",null);
+                                    Task task = OnAnalyzeSectorChange(vInfoArgs);
+                                    task.Wait();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            currentFrameImData.ImageState = ImageState.Normal;
+                        }
+                    }
+                    
+                    if (sw.Elapsed.TotalMilliseconds> time)
                     {
                         DebugLogger.Log(LogType.Information, $"{previousFrameImData.ImageState.ToString()} --> {currentFrameImData.ImageState.ToString()}" +
                                         $" state change detected. OnAnalyzeSectorChange invoked at {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}");
@@ -197,6 +195,7 @@ namespace ErrorTracker
                         time = 0;
                         time = rnd.Next(100000, 1200000);
                     }
+                    
                     previousFrameImData.Gray = currentFrameImData.Gray;
                     previousFrameImData.Green = currentFrameImData.Green;
                     previousFrameImData.Red = currentFrameImData.Red;
@@ -224,9 +223,7 @@ namespace ErrorTracker
         {
             bool stateSelected = false; bool multipleStates = false;
             if(Math.Abs(previousFrameImData.Other - currentFrameImData.Other) / (_sectorRect.Height * _sectorRect.Width) * 10 >= _differenceThreshold)
-            {
                 currentFrameImData.ImageState = previousFrameImData.ImageState;
-            }
             int redDifference = Math.Abs(previousFrameImData.Red - currentFrameImData.Red);
             int whiteDifference = Math.Abs(previousFrameImData.White - currentFrameImData.White);
             int greenDifference = Math.Abs(previousFrameImData.Green - currentFrameImData.Green);
@@ -241,10 +238,11 @@ namespace ErrorTracker
             //Debug.WriteLine("--------------------------------------------------------");
             if (currentFrameImData.Red> _sectorRect.Height * _sectorRect.Width / 100 * _differenceThreshold) //TODO What if more than 1 is over threshold
             {
-                stateSelected = true;
                 currentFrameImData.ImageState = ImageState.InError;
+                return;
             } 
-            if(currentFrameImData.Green> (_sectorRect.Height * _sectorRect.Width / 100) * _differenceThreshold)
+            if((currentFrameImData.Green > (_sectorRect.Height * _sectorRect.Width / 100) * _differenceThreshold) 
+                || (currentFrameImData.White > (_sectorRect.Height * _sectorRect.Width / 100) * _differenceThreshold))
             {
                 if (!stateSelected)
                 {
@@ -264,9 +262,7 @@ namespace ErrorTracker
                     currentFrameImData.ImageState = ImageState.NotActive;
                 }
                 else
-                {
                     multipleStates = true;
-                }
             }
             if (currentFrameImData.Pink > _sectorRect.Height * _sectorRect.Width / 100 * _differenceThreshold)
             {
@@ -276,15 +272,12 @@ namespace ErrorTracker
                     currentFrameImData.ImageState = ImageState.HandDrive;
                 }
                 else
-                {
                     multipleStates = true;
-                }
             }
-            if(!stateSelected) { currentFrameImData.ImageState = previousFrameImData.ImageState; }
+            if(!stateSelected) 
+                currentFrameImData.ImageState = previousFrameImData.ImageState; 
             if(multipleStates)
-            {
                 DebugLogger.Log(LogType.Warning, $"{DateTime.Now.ToShortTimeString()} More than one state changes detected @ AnalyzeSector.cs.TrackChanges(). Current video logs may be unreliable! \n Error state prioritized over other states."); //TODO tell user that video logs might be unreliable
-            }
         }
 
         private PixelColor PixelType(Color sample) //Double the channel threshold value for red and green for their Pixelcolor enum

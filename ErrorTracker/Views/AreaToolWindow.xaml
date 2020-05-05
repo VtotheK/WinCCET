@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ErrorTracker"
         mc:Ignorable="d"
-        Title="AreaToolWindow" Height="110" Width="400" Deactivated="Window_Deactivated" Activated="Window_Activated"
+        Title="Alueen valinta" Height="110" Width="400" Deactivated="Window_Deactivated" Activated="Window_Activated"
         >
     <Window.Resources>
     </Window.Resources>
