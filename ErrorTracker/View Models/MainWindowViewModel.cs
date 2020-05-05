@@ -17,7 +17,7 @@ namespace ErrorTracker
         MainWindow _mainWindow;
         const int FolderDestinationMaxChars = 50;
         const int Bits = 16;
-        const string NoFolderDestination = "Ei polkua";
+        const string NoFolderDestination = "No path";
 
         BitmapSource previewSource;
         RecorderCollection recorderCollection = new RecorderCollection();
@@ -224,7 +224,7 @@ namespace ErrorTracker
                     int frameX = SessionData.UserDevice.VideoCapabilities[(int)SessionData.VideoCapabilityIndex].FrameSize.Width;
                     int frameY = SessionData.UserDevice.VideoCapabilities[(int)SessionData.VideoCapabilityIndex].FrameSize.Height;
                     float RAMUsage = (((float)frameX * frameY * 16 / 8) / 1000000 * (clipLength + afterErrorLength) * (int)SessionData.UserFramesPerSecond);
-                    _mainWindow.RAMUsageApproximation.Text = ((int)RAMUsage).ToString() + "Mt";
+                    _mainWindow.RAMUsageApproximation.Text = ((int)RAMUsage).ToString() + "MB";
                     if (RAMUsage > 3000)
                         _mainWindow.RAMUsageApproximation.Background = Brushes.Red;
                     else if (RAMUsage > 2500)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ErrorTracker"
         mc:Ignorable="d"
-        Title="Alueen valinta" Height="110" Width="400" Deactivated="Window_Deactivated" Activated="Window_Activated"
+        Title="Alueen valinta" Height="110" Width="420" Deactivated="Window_Deactivated" Activated="Window_Activated"
         >
     <Window.Resources>
     </Window.Resources>
@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Path=ClipsSavedText}"  FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
         <Button Grid.Column="0" Grid.Row="1" IsEnabled="{Binding Path=SectorCanBeSelected}" Background="Transparent" Click="AreaToolSelectSector_Click">
-                <TextBlock FontWeight="Medium" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Valitse alue</TextBlock>
+                <TextBlock FontWeight="Medium" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Select sector</TextBlock>
             </Button>
 
         <Button Grid.Column="1" Grid.Row="1" IsEnabled="{Binding Path=SectorSelected}" Background="Transparent" Click="BeginAnalyze_Click">
@@ -31,9 +31,9 @@
             </Button>
 
         <Button Grid.Column="2" Grid.Row="1" Background="Transparent" Click="AreaToolClose_Click">
-            <TextBlock HorizontalAlignment="Center" FontWeight="Medium" FontSize="16" VerticalAlignment="Center">Sulje</TextBlock>
+            <TextBlock HorizontalAlignment="Center" FontWeight="Medium" FontSize="16" VerticalAlignment="Center">Close</TextBlock>
         </Button>
 
-        <TextBlock Visibility="{Binding Path=DontTouchTextVisibility}"  TextBlock.Foreground="RED" Grid.Column="1" Grid.Row="2" FontSize="20" FontWeight="Bold" Text="SEURANTA KÄYNNISSÄ. ÄLÄ KOSKE!" Margin="-80 0 -80 0" VerticalAlignment="Center" TextAlignment="Center"/>
+        <TextBlock Visibility="{Binding Path=DontTouchTextVisibility}"  TextBlock.Foreground="RED" Grid.Column="1" Grid.Row="2" FontSize="20" FontWeight="Bold" Text="MONITORING ACTIVE. DON'T TOUCH!" Margin="-80 0 -80 0" VerticalAlignment="Center" TextAlignment="Center"/>
     </Grid>
 </Window>

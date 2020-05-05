@@ -15,8 +15,8 @@ namespace ErrorTracker
         bool _sectorCanBeSelected = true;
         bool _analyzeIsRunning = false;
         Visibility dontTouchTextVisibility = Visibility.Hidden;
-        string _analyzeButtonText = "Aloita seuranta";
-        string _clipsSavedText = "Tallennettuja videoita: 0";
+        string _analyzeButtonText = "Start tracking";
+        string _clipsSavedText = "Saved video clips: 0";
         int _clipsSavedCount = 0;
         CancellationTokenSource _tokenSource = new CancellationTokenSource();
         CancellationToken blinkToken;
@@ -121,7 +121,7 @@ namespace ErrorTracker
                 _analyzeSector.Start();
                 AnalyzeIsRunning = true;
                 SectorCanBeSelected = false;
-                AnalyzeButtonText = "Lopeta seuranta";
+                AnalyzeButtonText = "End tracking";
                 Task.Run(() => StartBlink(blinkToken));
                 DontTouchTextVisibility = Visibility.Visible;
             }
@@ -132,7 +132,7 @@ namespace ErrorTracker
                 _analyzeSector.Stop();
                 SectorCanBeSelected = true;
                 AnalyzeIsRunning = false;
-                AnalyzeButtonText = "Aloita seuranta";
+                AnalyzeButtonText = "Start tracking";
                 DontTouchTextVisibility = Visibility.Hidden;
                 _analyzeSector = null;
             }

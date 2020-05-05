@@ -36,9 +36,7 @@ namespace ErrorTracker
         {
             camera = SessionData.UserDevice;
             if (SessionData.VideoCapabilityIndex != null)
-            {
                 camera.VideoResolution = camera.VideoCapabilities[(int)SessionData.VideoCapabilityIndex];
-            }
             if (SessionData.UserFramesPerSecond != null)
             {
                 _fpsChoke = SessionData.UserFramesPerSecond;
@@ -82,9 +80,7 @@ namespace ErrorTracker
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             if(_fpsStopWatch.ElapsedMilliseconds<_fpsChokeMilliseconds)
-            {
                 return;
-            }
             _frameCount++;
             if(_frameCount > 100)
             {
@@ -96,9 +92,7 @@ namespace ErrorTracker
             if (index < buffer.Length)
             {
                 if(buffer[index] != null)
-                {
                     buffer[index].Dispose();
-                }
                 buffer[index++] =  new Frame(eventArgs.Frame.Clone(rect, PixelFormat.Format16bppRgb565));
             }
             else
@@ -119,13 +113,10 @@ namespace ErrorTracker
             try
             {
                 if(index == 0)
-                {
                     timeStampIndex = buffer.Length - 2;
-                }
                 else
-                {
                     timeStampIndex = index -1;
-                }
+                
                 height = buffer[timeStampIndex].Bitmap.Height;
                 width = buffer[timeStampIndex].Bitmap.Width;
                 fileName = $@"{buffer[timeStampIndex].TimeStamp}.avi";
@@ -162,9 +153,7 @@ namespace ErrorTracker
                             firstRound = false;
                         }
                         else if (buffer[index] == null && !firstRound)
-                        {
                             break;
-                        }
                         try
                         {
                             writer.WriteVideoFrame(buffer[index++].Bitmap);
@@ -172,19 +161,15 @@ namespace ErrorTracker
                         catch(System.ArgumentException e)
                         {
                             if (index < buffer.Length - 1)
-                            {
                                 index++;
-                            }
                             else
-                            {
                                 index = 0;
-                            }
                             DebugLogger.Log(LogType.Error, $"ArgumentException. Forced to skip a frame in BufferRecorder.cs line 141. More info: {e.Message}");
                         }
                     }
-                    else { index = 0; }
+                    else 
+                        index = 0; 
                 }
-
             }
             catch(System.ArgumentException e)
             {
@@ -199,9 +184,7 @@ namespace ErrorTracker
             try
             {
                 if (!File.Exists(finalDestination) && File.Exists(fileName))
-                {
                     File.Move(fileName, finalDestination);
-                }
             }
             catch (DirectoryNotFoundException ex)
             {
@@ -216,7 +199,6 @@ namespace ErrorTracker
             {
                 DebugLogger.Log(LogType.Error, $"At {DateTime.Now.ToShortTimeString()} in BufferRecorder.cs line " +
                     $"132, could not locate the video file in build folder.");
-
             }
             Dispose();
             index = 0;
@@ -230,9 +212,7 @@ namespace ErrorTracker
             foreach(Frame frame in buffer)
             {
                 if (frame != null)
-                {
                     frame.Dispose();
-                }
             }
         }
 
@@ -246,12 +226,10 @@ namespace ErrorTracker
                 _bitmap = bitmap;
                 timeStamp = DateTime.Now;
             }
-
             public Bitmap Bitmap
             {
                 get => _bitmap;
             }
-
             public string TimeStamp
             {
                 get
@@ -259,7 +237,6 @@ namespace ErrorTracker
                     return timeStamp.ToString("dd.MM.yyyy HH:mm:ss");
                 }
             }
-
             public void Dispose()
             {
                 Bitmap.Dispose();
